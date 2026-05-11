@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.minecraft.installer'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+processResources {
+    from('libs/mod-loader.jar')
+    from('libs/hitsound-mod.jar')
+    from('libs/timerr.jar')
+}
+
+jar {
+    archiveFileName = 'mod-installer.jar'
+    manifest {
+        attributes 'Main-Class': 'com.minecraft.installer.ModInstaller'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
